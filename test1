@@ -1,0 +1,22 @@
+# split a string without using split() in Python
+MyStr = "aaa;bbb;ccc"
+mylist = []
+tmpStr = ''
+
+for ch in MyStr:
+       
+    if ch == ';':
+        
+        mylist.append(tmpStr)            
+        tmpStr = '' 
+        
+        
+    else:
+        tmpStr += ch #tmpStr = tmpStr + ch 
+        
+
+if tmpStr != '':
+    mylist.append(tmpStr)
+    
+print(mylist) 
+         
