@@ -16,21 +16,22 @@ def hex_to_bin(hex:str) -> int:
     ms_nibble = hex[0]
     ls_nibble = hex[1]
     
-
-    def nibble_to_bin(ch:str) -> int:  #nibble半位元
-        code = ord(ch)
-        ret2 = (code - 0x30) if code < 0x41 else (code - 55)
+# nibble_to_bin函示，參數ch 型別為str，retrun的型別為int
+# nibble_to_bin 是4-bit to 2-bit嗎? 
+    def nibble_to_bin(ch:str) -> int:  #nibble半位元(4-bit)
+        code = ord(ch) #ord()參數返回對應的ASCII
+        ret2 = (code - 0x30) if code < 0x41 else (code - 55) # 0x30=0 , 0x41=A ,code-55?       
         return ret2
 
-    ret = nibble_to_bin(ms_nibble)*16 + nibble_to_bin(ls_nibble)
-    return ret
+    ret = nibble_to_bin(ms_nibble)*16 + nibble_to_bin(ls_nibble) #不懂
+    return ret   
  
 
-
-def query_to_utf8(s:str, codec='utf8') -> str:
+# query_to_utf8 函式，參數s型別為str，解碼為utf8，返回型別為str
+def query_to_utf8(s:str, codec='utf8') -> str: 
     i = 0
-    length = len(s)
-    bya = bytearray()
+    length = len(s) # s字串的長度
+    bya = bytearray() # return新的位元組陣列,元素必須為0~255的整數
     while i < length:
         if s[i] == r'%':
             bya.append(hex_to_bin(s[i+1:i+3]))
