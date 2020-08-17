@@ -48,6 +48,8 @@ def query_components(s:str, codec='utf8') -> str:
     
 print(query_components(r'name%3D%E8%95%AD%E6%B2%96%26age%3D48%26%E7%95%99%E8%A8%80%3D%E5%A4%AA%E6%9C%89%E8%B6%A3%E4%BA%86'))
 print(query_components(r'name%3D%BF%BD%A8R%26age%3D30%26%AFd%A8%A5%3D%A4%A4%A4%E5','big5'))
+#{'name': '蕭沖', 'age': '48', '留言': '太有趣了'}
+#{'name': '蕭沖', 'age': '30', '留言': '中文'}
 
         
 
