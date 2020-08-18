@@ -1,20 +1,20 @@
 #定義split函式，參數s、delimiter型別皆為str，此函式retrn 的型別為list
 def split(s:str,delimiter:str) -> list: 
-    s += delimiter # tricky
+    s += delimiter # tricky 偷偷先多加一個分號，為了在for裡面取最後的片段
     start_pos = 0
     lst = []
 
     for i, ch in enumerate(s):  # enumerate() 對一個list遍歷索引和值
         if ch == delimiter:
-            lst.append(s[start_pos:i])
+            lst.append(s[start_pos:i]) # slicing切片 start_pos到i
             start_pos = i+1 
     return lst
 
 # hex_to_bin函式，參數hex型別為str，此函式retrn 的型別為int
 def hex_to_bin(hex:str) -> int:
     hex = hex.upper() ## 小寫轉大寫
-    ms_nibble = hex[0]
-    ls_nibble = hex[1]
+    ms_nibble = hex[0] # ms_nibble最大位數
+    ls_nibble = hex[1] # ls_nibble 最小位數
     
 # nibble_to_bin函示，參數ch 型別為str，retrun的型別為int
 # nibble_to_bin 是4-bit to 2-bit嗎? 
@@ -27,7 +27,7 @@ def hex_to_bin(hex:str) -> int:
     return ret   
  
 
-# query_to_utf8 函式，參數s型別為str，解碼為utf8，返回型別為str
+# query_to_utf8 函式，參數s型別為str，解碼為utf8，返回型別為str。此函式目的為解譯
 def query_to_utf8(s:str, codec='utf8') -> str: 
     i = 0
     length = len(s) # s字串的長度
@@ -53,5 +53,6 @@ def query_components(s:str, codec='utf8') -> str:
     
 print(query_components(r'name%3D%E8%95%AD%E6%B2%96%26age%3D48%26%E7%95%99%E8%A8%80%3D%E5%A4%AA%E6%9C%89%E8%B6%A3%E4%BA%86'))
 print(query_components(r'name%3D%BF%BD%A8R%26age%3D30%26%AFd%A8%A5%3D%A4%A4%A4%E5','big5'))
-
+#{'name': '蕭沖', 'age': '48', '留言': '太有趣了'} // utf-8 為3-byte
+#{'name': '蕭沖', 'age': '30', '留言': '中文'} // big5 為2-byte
         
