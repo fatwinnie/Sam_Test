@@ -1,4 +1,6 @@
+
 # split a string without using split() in Python
+
 MyStr = "aaa;bbb;ccc"
 mylist = []
 tmpStr = ''
