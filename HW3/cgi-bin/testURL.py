@@ -1,0 +1,15 @@
+#! /usr/bin/python3
+
+print('Content-type:text/html;charset=UTF-8')
+print('')
+print('<html>')
+print('<head>')
+print('<title> Write Table </title>')
+print('</head>')
+print('<body>')
+print('標題:<input type="text" name="UserName">',"<BR>")
+print('內容:',"<BR>")
+print('<TEXTAREA Name="comment" rows=6 cols=60></textarea>',"<BR>")
+print('<input type="submit" value="送出">')
+print('</body>')
+print('</html>')
