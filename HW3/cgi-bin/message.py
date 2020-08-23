@@ -1,0 +1,17 @@
+#! /usr/bin/python3
+
+print('Content-type:text/html;charset=UTF-8')
+print('')
+print('<html>')
+print('<head>')
+print('<title> 留言板 </title>')
+print('</head>')
+print('<body>')
+print('<form action="./message_server.py" method="POST">')
+print('標題:<input type="text" name="title">',"<BR>")
+print('內容:',"<BR>")
+print('<TEXTAREA name="content" rows=6 cols=60></textarea>',"<BR>")
+print('<input type="submit" value="送出">')
+print('</form>')
+print('</body>')
+print('</html>')
