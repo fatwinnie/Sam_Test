@@ -76,7 +76,12 @@ if method =='GET':
     if connection.is_connected():
     # 查詢資料庫
         cursor = connection.cursor()
-        cursor.execute(f"SELECT * FROM member where name='{my_query['UserName']}';")
+        my_QueryName = my_query['UserName']      
+        cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': my_QueryName}) #Preventing SQL injection
+        #cursor.execute(f"SELECT * FROM member where name='{my_query['UserName']}';")
+ 
+
+        
         row = cursor.fetchone()
         if row is None:
             print('name or password error')
@@ -86,7 +91,7 @@ if method =='GET':
     if my_query['pwd'] == row[2]:
         print('PASS!!!!!',"<BR>")
         print('Hi,',row[1],"<BR>")
-        print('<meta http-equiv="refresh" content="1;url=./testURL.py">')
+        print('<meta http-equiv="refresh" content="2;url=./message.py">')
         #print('Your password is:',row[2])
     else:
         print('Password Error!')
@@ -100,4 +105,5 @@ while row is not None:
     print(row)
     row = cursor.fetchone()
 """
+    
     
