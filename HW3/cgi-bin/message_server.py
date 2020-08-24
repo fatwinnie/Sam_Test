@@ -7,9 +7,9 @@ from datetime import datetime
 
 connection = mysql.connector.connect(
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='2033')  # 密碼
+    password='root')  # 密碼
 
 def split(s:str,delimiter:str) -> list:
     s += delimiter # tricky
@@ -87,5 +87,3 @@ if method =='POST':
         cursor.close()
         print('inserted successfully')
         print('<meta http-equiv="refresh" content="2;url=./message.py">')
-        
-
