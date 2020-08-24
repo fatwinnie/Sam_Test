@@ -79,9 +79,7 @@ if method =='GET':
         my_QueryName = my_query['UserName']      
         cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': my_QueryName}) #Preventing SQL injection
         #cursor.execute(f"SELECT * FROM member where name='{my_query['UserName']}';")
- 
-
-        
+       
         row = cursor.fetchone()
         if row is None:
             print('name or password error')
@@ -106,6 +104,33 @@ if method =='GET':
         print('</form>')
         print('</body>')
         print('</html>')
+    
+        # print history
+        print("<b>History Message</b>","<BR>")
+        cursor.execute("SELECT * FROM message WHERE user= %(name)s", {'name': my_QueryName})
+        """
+        row = cursor.fetchone()
+        while row is not None:
+            print('title:',row[2],"<BR>")
+            print('content:',row[3],"<BR>")
+            print('time:',row[4],"<BR>")
+            print('<hr/>')
+            row = cursor.fetchone()
+        """
+        report = cursor.fetchall()
+        print ('<table border="1"><tr><th>title</th><th>content</th><th>time</th></tr>')
+        print ('<tbody>')
+        for field in report:
+            title = field[2]
+            content = field[3]
+            time = field[4]
+            print ('<tr><td>' + title + '</td><td>' + content + '</td><td>' + str(time) + '</td></tr>')
+        print ('</tbody>')
+        print ('</table>')
+            
+
+        
+
     else:
         print('Password Error!')
 
