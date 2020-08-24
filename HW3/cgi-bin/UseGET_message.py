@@ -7,9 +7,9 @@ from mysql.connector import Error
 
 connection = mysql.connector.connect(
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='2033')  # 密碼
+    password='root')  # 密碼
 
 
 
@@ -72,31 +72,33 @@ if method =='GET':
     
     query = os.environ['QUERY_STRING']   
     my_query = query_components(query)
-    my_QueryName = my_query['UserName']  
 
     if connection.is_connected():
     # 查詢資料庫
         cursor = connection.cursor()
+        my_QueryName = my_query['UserName']      
+        cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': my_QueryName}) #Preventing SQL injection
         #cursor.execute(f"SELECT * FROM member where name='{my_query['UserName']}';")
-        #Preventing SQL injection: 
-        cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': my_QueryName})
-        row = cursor.fetchall()
+ 
 
-     
+        
+        row = cursor.fetchone()
+        if row is None:
+            print('name or password error')
+            sys.exit()
         
     #print('hi')
     if my_query['pwd'] == row[2]:
         #print('PASS!!!!!',"<BR>")
         print('Hi,',row[1],"<BR>")
         #print('<meta http-equiv="refresh" content="2;url=./message.py">')
-        print('<BR>')
         print('<html>')
         print('<head>')
         print('<title> 留言板 </title>')
         print('</head>')
-        print('<body>')
-        print('<form action="./message_server.py" method="POST">')    
-        print(f'<input type="hidden" name="auth_Name" value="{my_QueryName}">')   
+        print('<body>')       
+        print('<form action="./message_server.py" method="POST">')
+        print(f'<input type="hidden" name="auth_Name" value="{my_QueryName}">')
         print('標題:<input type="text" name="title">',"<BR>")
         print('內容:',"<BR>")
         print('<TEXTAREA name="content" rows=6 cols=60></textarea>',"<BR>")
@@ -104,13 +106,6 @@ if method =='GET':
         print('</form>')
         print('</body>')
         print('</html>')
-
-        #印出歷史資料
-        while row is not None:
-            print(row)
-            row = cursor.fetchone()
-
-
     else:
         print('Password Error!')
 
@@ -123,3 +118,4 @@ while row is not None:
     print(row)
     row = cursor.fetchone()
 """
+    
