@@ -78,9 +78,9 @@ if method =='GET':
     # 查詢資料庫
         cursor = connection.cursor()
         #cursor.execute(f"SELECT * FROM member where name='{my_query['UserName']}';")
-        #Preventing SQL injection: 以下兩種方法
-        #cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': my_QueryName}) #第1種
-        cursor.execute("SELECT * FROM member WHERE name='%s'" % my_QueryName) #第2種
+        #Preventing SQL injection: 
+        cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': my_QueryName})
+
         row = cursor.fetchone()
 
         if row is None:
