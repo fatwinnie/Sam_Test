@@ -3,13 +3,13 @@ import os
 import sys
 import mysql.connector
 from mysql.connector import Error
-import datetime
+from datetime import datetime
 
 connection = mysql.connector.connect(
     host='localhost', # 主機名稱
-    database='homework', # 資料庫名稱
+    database='test1', # 資料庫名稱
     user='root',      # 帳號
-    password='root')  # 密碼
+    password='2033')  # 密碼
 
 def split(s:str,delimiter:str) -> list:
     s += delimiter # tricky
@@ -66,24 +66,26 @@ method = os.environ['REQUEST_METHOD']
 if method =='POST':
     str_len = int(os.environ['CONTENT_LENGTH'])
     detail = sys.stdin.read(str_len)
-    my_query = query_components(detail)
+    #當按空白鍵 會變成+號,所以把+號轉換成％20
+    replace_detail = detail.replace('+','%20') 
+    my_query = query_components(replace_detail)
     #print(my_query)
     #print(my_query['title'])
-    #now = datetime.datetime.utcnow()
-    #now = datetime.now().date()
+    #print(my_query['auth_Name'])
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     #print(now)
+    
 
     if connection.is_connected():
 
         # inset into 資料庫
         cursor = connection.cursor() 
-        sql = "INSERT INTO message (title,content,time) VALUES (%s, %s,%s)"
-        #val = (my_query['title'], my_query['content'],now.strftime('%Y-%m-%d %H:%M:%S'))
-        val = (my_query['title'], my_query['content'],now)
+        sql = "INSERT INTO message (user,title,content,time) VALUES (%s,%s, %s,%s)"
+        val = (my_query['auth_Name'],my_query['title'], my_query['content'],now)
         cursor.execute(sql, val)
         connection.commit()
+        cursor.close()
         print('inserted successfully')
         print('<meta http-equiv="refresh" content="2;url=./message.py">')
-       
+        
 
