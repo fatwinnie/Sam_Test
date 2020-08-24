@@ -86,4 +86,5 @@ if method =='POST':
         connection.commit()
         cursor.close()
         print('inserted successfully')
-        print('<meta http-equiv="refresh" content="2;url=./message.py">')
+        #print('<meta http-equiv="refresh" content="2;url=./UseGET_message.py">')
+        print('Location: www.google.com\n')
