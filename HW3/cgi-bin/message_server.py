@@ -70,7 +70,8 @@ if method =='POST':
     #print(my_query)
     #print(my_query['title'])
     #now = datetime.datetime.utcnow()
-    now = datetime.now().date()
+    #now = datetime.now().date()
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     #print(now)
 
     if connection.is_connected():
@@ -78,7 +79,8 @@ if method =='POST':
         # inset into 資料庫
         cursor = connection.cursor() 
         sql = "INSERT INTO message (title,content,time) VALUES (%s, %s,%s)"
-        val = (my_query['title'], my_query['content'],now.strftime('%Y-%m-%d %H:%M:%S'))
+        #val = (my_query['title'], my_query['content'],now.strftime('%Y-%m-%d %H:%M:%S'))
+        val = (my_query['title'], my_query['content'],now)
         cursor.execute(sql, val)
         connection.commit()
         print('inserted successfully')
