@@ -5,7 +5,9 @@ import sys
 import mysql.connector
 from mysql.connector import Error
 from http import cookies
-
+import hashlib
+import random
+import string
 
 
 
@@ -64,9 +66,9 @@ def validate(_username,_password):
         #conn = pymysql.connect(host='localhost', port=3306, user='root', passwd='2033', db='test1', charset='utf8')
     conn = mysql.connector.connect(      
         host='localhost', # 主機名稱
-        database='test1', # 資料庫名稱
+        database='homework', # 資料庫名稱
         user='root',      # 帳號
-        password='2033')  # 密碼
+        password='root')  # 密碼
 
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': _username})
@@ -76,22 +78,64 @@ def validate(_username,_password):
         if userData[2] == _password:
             #print(userData[1]) 
             return True
-    else:
+        else:
         #print('no data')
-        return False
+            return False
        
-"""
-        
+    """    
     except Exception as e:
-        print("Error: ", e)
-        sys.exit( e)
+        #print('Error:', e)
+        sys.exit(e)
 
     finally:
-        if (conn.open):
+        if (conn.is_connected()):
             cursor.close()
             conn.close()
- """
+"""
+
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
+
+def insertSID(_SID):
+    global userData
+    try:
+        conn = mysql.connector.connect(      
+        host='localhost', # 主機名稱
+        database='homework', # 資料庫名稱
+        user='root',      # 帳號
+        password='root')  # 密碼
+
+        #conn = pymysql.connect(host='localhost', port=3306, user='root', passwd='10017730', db='ruby_db', charset='utf8')
+        timeout = datetime.now() + timedelta(hours=1)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO user_verify (SID, user_ID, expire) VALUES (%s, %s, %s)" ,(_SID, userData[0],timeout ))
+        conn.commit()
+
+def findSID(cookieStr):
     
+    temp = cookieStr.split('=')
+    SID_val = temp[1]
+    
+    return SID_val
+  
+
+
+
+def update_SID_expire(_sid):
+
+    try:
+        conn = mysql.connector.connect(      
+        host='localhost', # 主機名稱
+        database='homework', # 資料庫名稱
+        user='root',      # 帳號
+        password='root')  # 密碼
+
+        cursor = conn.cursor()
+        cursor.execute("UPDATE user_verify SET expire = ADDTIME(CURRENT_TIMESTAMP,'2:0:0.0') WHERE SID = %s ",(_sid))
+        conn.commit()
+
 
 #print('Content-type:text/html;charset=UTF-8')
 #print('')
@@ -123,14 +167,22 @@ else:
     if(validate(post_dict['UserName'],post_dict['pwd'])):
         print('Content-type:text/html;charset=UTF-8')
         str_cookie = os.environ.get('HTTP_COOKIE')
-        #string_cookie = os.environ.get('HTTP_COOKIE')
+        
+        if(str_cookie.find('POOH_SID')<0):
+            token = hashlib.sha1() #hashlib提供字元加密功能
+            token.update(get_random_string(50).encode('utf-8')) #產生隨機字串
+            tokenCode = token.hexdigest()
+            insertSID(tokenCode)
+            print("Set-Cookie:POOH_SID=",tokenCode)
+
+        else:
+            SID_cookie = findSID(str_cookie)
+            update_SID_expire(SID_cookie)
+
         print('')
         print('HELLO!!'+" "+post_dict['UserName'])      
-        print(str_cookie)
-        #print('<meta http-equiv="refresh" content="2; url=./message.py">')
+        print('<meta http-equiv="refresh" content="2; url=./message.py">')
 
     else: 
         print('name or password Error!')
         print('<meta http-equiv="refresh" content="2; url=../index.html">')
-      
-
