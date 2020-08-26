@@ -1,0 +1,2 @@
+1. 登入後，message.py 要返回自己(不要像HW3 message.py 的表單轉到message_server.py)
+2. 加入token cookie session
