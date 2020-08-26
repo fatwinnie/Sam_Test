@@ -4,6 +4,7 @@ import os
 import sys
 import mysql.connector
 from mysql.connector import Error
+from http import cookies
 
 
 
@@ -92,8 +93,8 @@ def validate(_username,_password):
  """
     
 
-print('Content-type:text/html;charset=UTF-8')
-print('')
+#print('Content-type:text/html;charset=UTF-8')
+#print('')
 method = os.environ['REQUEST_METHOD']
 
 if method =='GET':
@@ -101,27 +102,35 @@ if method =='GET':
     my_query = query_components(os.environ['QUERY_STRING'])
     #print(my_query) ==> {'UserName': 'ting', 'pwd': '1234'} 
     #print(my_query['UserName']) ==> ting
-    """ 原本寫的：
-    query = os.environ['QUERY_STRING']   
-    my_query = query_components(query)
-    my_QueryName = my_query['UserName']     
-    """
+  
     check = validate(my_query['UserName'],my_query['pwd'])
     if(check):
+        print('Content-type:text/html;charset=UTF-8')
+        print('')
         print('Welcome!')
         print('<meta http-equiv="refresh" content="2; url=./message.py">')
     else:
+        print('Content-type:text/html;charset=UTF-8')
+        print('')
         print('name or password Error!')
 else:
+    # method == POST
     post_len = int(os.environ['CONTENT_LENGTH'])
     detail = sys.stdin.read(post_len)
     post_dict = dict()
     post_dict = query_components(detail)
     #print(post_dict)
     if(validate(post_dict['UserName'],post_dict['pwd'])):
-        print('HELLO!!'+" "+post_dict['UserName'])
-        print('<meta http-equiv="refresh" content="2; url=./message.py">')
+        print('Content-type:text/html;charset=UTF-8')
+        str_cookie = os.environ.get('HTTP_COOKIE')
+        #string_cookie = os.environ.get('HTTP_COOKIE')
+        print('')
+        print('HELLO!!'+" "+post_dict['UserName'])      
+        print(str_cookie)
+        #print('<meta http-equiv="refresh" content="2; url=./message.py">')
+
     else: 
         print('name or password Error!')
+        print('<meta http-equiv="refresh" content="2; url=../index.html">')
       
 
