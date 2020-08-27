@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /home/ting/My_test2/bin/python3
 
 import os
 import sys
@@ -66,9 +66,9 @@ def validate(_username,_password):
     
     conn = mysql.connector.connect(      
         host='localhost', # 主機名稱
-        database='homework', # 資料庫名稱
+        database='test1', # 資料庫名稱
         user='root',      # 帳號
-        password='root')  # 密碼
+        password='2033')  # 密碼
 
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': _username})
@@ -94,9 +94,9 @@ def insertSID(_SID):
 
     conn = mysql.connector.connect(      
     host='localhost', # 主機名稱
-    database='homework', # 資料庫名稱
+    database='test1', # 資料庫名稱
     user='root',      # 帳號
-    password='root')  # 密碼
+    password='2033')  # 密碼
 
     #conn = pymysql.connect(host='localhost', port=3306, user='root', passwd='10017730', db='ruby_db', charset='utf8')
     timeout = datetime.now() + timedelta(hours=1)
@@ -112,19 +112,6 @@ def findSID(cookieStr):
 
 
 
-def update_SID_expire(_sid):
-        
-    conn = mysql.connector.connect(      
-    host='localhost', # 主機名稱
-    database='homework', # 資料庫名稱
-    user='root',      # 帳號
-    password='root')  # 密碼
-
-    cursor = conn.cursor()
-    cursor.execute("UPDATE user_verify SET expire = ADDTIME(CURRENT_TIMESTAMP,'2:0:0.0') WHERE SID = %s ",(_sid))
-    conn.commit()
-
-
 method = os.environ['REQUEST_METHOD']
 
 if method =='GET':
@@ -137,8 +124,10 @@ if method =='GET':
     if(check):
         print('Content-type:text/html;charset=UTF-8')
         print('')
-        print('Welcome!')
-        print('<meta http-equiv="refresh" content="2; url=./message.py">')
+        #sys.exit()
+        #print('Welcome!')
+        print('<meta http-equiv="refresh" content="1; url=./message.py">')
+
     else:
         print('Content-type:text/html;charset=UTF-8')
         print('')
@@ -150,9 +139,10 @@ else:
     post_dict = dict()
     post_dict = query_components(detail)
     #print(post_dict)
-
+    print('Content-type:text/html;charset=UTF-8')
+    
     if(validate(post_dict['UserName'],post_dict['pwd'])):
-        print('Content-type:text/html;charset=UTF-8')
+       
         str_cookie = os.environ.get('HTTP_COOKIE')
         
         if(str_cookie.find('POOH_SID')<0):
@@ -161,15 +151,15 @@ else:
             tokenCode = token.hexdigest()
             insertSID(tokenCode)
             print("Set-Cookie:POOH_SID=",tokenCode)
+            print('')
 
         else:
             SID_cookie = findSID(str_cookie)
-            update_SID_expire(SID_cookie)
 
-        print('')
-        print('HELLO!!'+" "+post_dict['UserName'])      
-        print('<meta http-equiv="refresh" content="2; url=./message.py">')
+        #print('HELLO!!'+" "+post_dict['UserName'])      
+        print('<meta http-equiv="refresh" content="1; url=./message.py">')
 
     else: 
+        print('')
         print('name or password Error!')
         print('<meta http-equiv="refresh" content="2; url=../index.html">')
