@@ -1,9 +1,14 @@
-#! /usr/bin/python3
+#! /home/ting/My_test2/bin/python3
 import os
 import sys
 import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
+import random
+import bcrypt
+import hashlib
+from http import cookies
+from datetime import datetime, timedelta
 
 def split(s:str,delimiter:str) -> list:
     s += delimiter # tricky
@@ -54,18 +59,109 @@ def query_components(s:str, codec='utf8') -> str:
         
     return dic
 
-print('Content-type:text/html;charset=UTF-8')
-print('') # end of header 
-print('<html>')
-print('<head>')
-print('<title> 留言板 </title>')
-print('</head>')
-print('<body>')
+
+def findSID(cookieStr):
+    temp = cookieStr.split('=')
+    SID_value = temp[1]
+    return SID_value
+
+
+def SID_info(_sid):
+
+    conn = mysql.connector.connect(      
+    host='localhost', # 主機名稱
+    database='test1', # 資料庫名稱
+    user='root',      # 帳號
+    password='2033')  # 密碼
+
+    cursor=conn.cursor()
+    row_count=cursor.execute("SELECT user_ID FROM user_verify JOIN member \
+        ON user_verify.user_ID=member.idmember WHERE `expire` > CURRENT_TIMESTAMP \
+        AND user_verify.SID = %s",(_sid,))
+    msg = cursor.fetchone()
+    
+
+    if msg is not None:
+        return msg
+    else:
+        print('沒有權限，請先登入')
+        print('<meta http-equiv="refresh" content="2; url=../index.html">')
+        sys.exit()
+
+
+def AddMessage(form_msg,user_ID):
+
+    conn = mysql.connector.connect(      
+    host='localhost', # 主機名稱
+    database='test1', # 資料庫名稱
+    user='root',      # 帳號
+    password='2033')  # 密碼
+
+    cursor = conn.cursor()
+    sql = "INSERT INTO message (title,content,time,user_id) VALUES (%s,%s, %s,%s)"
+    val = (form_msg['title'], form_msg['content'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_ID )
+    cursor.execute(sql, val)
+    conn.commit()
+
+
+def history(userId):
+
+    conn = mysql.connector.connect(      
+    host='localhost', # 主機名稱
+    database='test1', # 資料庫名稱
+    user='root',      # 帳號
+    password='2033')  # 密碼
+
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM message WHERE user_id= %(user_id)s", {'user_id': userId})
+    report = cursor.fetchall()
+     
+    if report != []:
+        for field in report:
+            
+            print(f'<p>Title:{field[2]}</p>')
+            print(f'<p>content:{field[3]}</p>')
+            print(f'<p>post_time:{field[4]}</p>')
+            print('<hr/>')
+    else:
+        print('No history message in database')
+
+
+    
+string_cookie = os.environ.get('HTTP_COOKIE')
+method = os.environ['REQUEST_METHOD']
+
+if(string_cookie.find('POOH_SID')<0):
+    print('Content-type:text/html;charset=UTF-8')
+    print('') # end of header 
+    print('<h1>你沒有權限，請先登入</h1>')
+    print('<meta http-equiv="refresh" content="2; url=../index.html">')
+
+else:
+    print('Content-type:text/html;charset=UTF-8')
+    print('') # end of header
+    print('hiii')
+    sid_cookie = findSID(string_cookie)
+    data = SID_info(sid_cookie)
+    print(data)
+
+    if method=='POST':
+        POSTstr_len = int(os.environ['CONTENT_LENGTH'])
+        detail = sys.stdin.read(POSTstr_len)
+        replace_detail = detail.replace('+','%20') #當按空白鍵 會變成+號,所以把+號轉換成％20
+        my_query = query_components(replace_detail)
+        AddMessage(my_query,data[0])
+  
+
+print('Hi,',data[0])
 print('<form action="./message.py" method="POST">')
 print('標題:<input type="text" name="title">',"<BR>")
 print('內容:',"<BR>")
 print('<TEXTAREA name="content" rows=6 cols=60></textarea>',"<BR>")
 print('<input type="submit" value="送出">')
 print('</form>')
-print('</body>')
-print('</html>')
+
+print('<BR>')
+print('History Message')
+
+history(data[0])
