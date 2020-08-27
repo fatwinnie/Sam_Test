@@ -79,7 +79,10 @@ def SID_info(_sid):
         ON user_verify.user_ID=member.idmember WHERE `expire` > CURRENT_TIMESTAMP \
         AND user_verify.SID = %s",(_sid,))
     msg = cursor.fetchone()
-    
+    # 因為剛好遇到expire為保留字串，所以expire 要加上`expire`  
+    # (_sid) 是trple()
+    # 若要取第一個值，不能只寫(_sid_)，要寫(_sid,)  
+
 
     if msg is not None:
         return msg
