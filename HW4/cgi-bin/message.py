@@ -83,7 +83,6 @@ def SID_info(_sid):
     # (_sid) 是trple()
     # 若要取第一個值，不能只寫(_sid_)，要寫(_sid,)  
 
-
     if msg is not None:
         return msg
     else:
@@ -122,10 +121,21 @@ def history(userId):
     if report != []:
         for field in report:
             
+            print('<div class="container_history">')
+            print('<div class="history_title">')
             print(f'<p>Title:{field[2]}</p>')
+            print('</div>')
+
+            print('<div class="history_content">')
             print(f'<p>content:{field[3]}</p>')
+            print('</div>')
+
+            print('<div class="history_time">')
             print(f'<p>post_time:{field[4]}</p>')
+            print('</div>')
+            
             print('<hr/>')
+            print('</div>')
     else:
         print('No history message in database')
 
@@ -143,10 +153,10 @@ if(string_cookie.find('POOH_SID')<0):
 else:
     print('Content-type:text/html;charset=UTF-8')
     print('') # end of header
-    print('hiii')
+    #print('hiii')
     sid_cookie = findSID(string_cookie)
     data = SID_info(sid_cookie)
-    print(data)
+    #print(data)
 
     if method=='POST':
         POSTstr_len = int(os.environ['CONTENT_LENGTH'])
@@ -156,15 +166,29 @@ else:
         AddMessage(my_query,data[0])
   
 
-print('Hi,',data[0])
-print('<form action="./message.py" method="POST">')
-print('標題:<input type="text" name="title">',"<BR>")
-print('內容:',"<BR>")
-print('<TEXTAREA name="content" rows=6 cols=60></textarea>',"<BR>")
-print('<input type="submit" value="送出">')
+#print('Hi,',data[0]
+print('<!DOCTYPE html> ')
+print('<html>')
+print('<head>')
+print('<title>留言板</title>')
+print('</head>')
+print('<body>')
+print('<div class="container">')
+print(' <form action="./message.py" method="POST">')
+print('     標題:<input type="text" name="title">',"<BR>")
+print('     內容:',"<BR>")
+print('     <TEXTAREA name="content" rows=6 cols=60></textarea>',"<BR>")
+print('     <input type="submit" value="送出">')
 print('</form>')
+print('</div>')
 
 print('<BR>')
-print('History Message')
+print('<div class="container">')
+print(' <h1>History Message</h1>')
+print('</div>')
 
 history(data[0])
+
+
+print('</body>')
+print('</html>')
