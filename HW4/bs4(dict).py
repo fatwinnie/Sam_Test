@@ -38,11 +38,12 @@ for rec in find_recommend:
     
 
 
-ptt_nba_dict = {"author": post_author,
+joke_dict = {"author": post_author,
                 "recommends": recommend,
                 "title": post_title,
                 "date": post_date
 }
 
-ptt_nba_df = pd.DataFrame(ptt_nba_dict)
-ptt_nba_df
+joke_df = pd.DataFrame(ptt_nba_dict)
+#joke_df
+joke_df.to_csv('beatifulsoup.csv',encoding='utf_8_sig')
