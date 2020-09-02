@@ -123,15 +123,15 @@ def history(userId):
             
             print('<div class="container_history">')
             print('<div class="history_title">')
-            print(f'<p>Title:{field[2]}</p>')
+            print(f'Title:<p>{field[2]}</p>')
             print('</div>')
 
             print('<div class="history_content">')
-            print(f'<p>content:{field[3]}</p>')
+            print(f'content:<p>{field[3]}</p>')
             print('</div>')
 
             print('<div class="history_time">')
-            print(f'<p>post_time:{field[4]}</p>')
+            print(f'post_time:<p>{field[4]}</p>')
             print('</div>')
             
             print('<hr/>')
@@ -183,7 +183,7 @@ print('</form>')
 print('</div>')
 
 print('<BR>')
-print('<div class="container">')
+print('<div class="container_history">')
 print(' <h1>History Message</h1>')
 print('</div>')
 
