@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup 
 import csv
 import mysql.connector
+from mysql.connector import Error
 
 Title = []
 Content = []
@@ -11,7 +12,7 @@ Time = []
 def getData(url):
     my_header={
         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
-        'cookie':'Cookie: POOH_SID=706166d4f9377b06dab8cfabd7a79b31297c7f2a'
+        'cookie':'Cookie: POOH_SID=d407bcc9fce5042210db0244191ce1eb258347f4'
     }
     resp = requests.get(url, headers= my_header)
     resp.encoding ='utf-8'
@@ -51,22 +52,32 @@ def write_DB():
     charset='utf8') 
 
     cursor = conn.cursor()
-    if Title != []:
-        for i in Title:
-            print(i)
-            try:
-                sql = "INSERT INTO crawler (title, content,time) VALUES (%s, %s,%s);"
-                val = ("John", "Highway 21","1456")
-                cursor.execute(sql, val)
-                print(sql)
-                
-                
+    a = len(Title)
+    for i in range(a):           
+        try:
+                     
+            sql = "INSERT INTO crawler (title, content,time) VALUES (%s, %s,%s);"
+            val = (Title[i],Content[i],Time[i])
+            #print(i)
+                    
+            cursor.execute(sql, val)
+            #print(sql)
             
-            except Error as e:
-                print("資料庫連接失敗：", e)
+                            
+        
+        except Error as e:
+            print("資料庫連接失敗：", e)
 
-        conn.commit()
-        conn.close()
+        
+        
+        
+            
+            #conn.commit()
+            #conn.close()
+            
+
+    conn.commit()
+    conn.close()
 
                
 
