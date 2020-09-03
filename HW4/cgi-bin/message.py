@@ -1,4 +1,4 @@
-#! /home/ting/My_test2/bin/python3
+#! /home/ting/My_test1/bin/python3
 import os
 import sys
 import mysql.connector
@@ -70,13 +70,13 @@ def SID_info(_sid):
 
     conn = mysql.connector.connect(      
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='2033')  # 密碼
+    password='root')  # 密碼
 
     cursor=conn.cursor()
     row_count=cursor.execute("SELECT user_ID FROM user_verify JOIN member \
-        ON user_verify.user_ID=member.idmember WHERE `expire` > CURRENT_TIMESTAMP \
+        ON user_verify.user_ID=member.id WHERE `expire` > CURRENT_TIMESTAMP \
         AND user_verify.SID = %s",(_sid,))
     msg = cursor.fetchone()
     # 因為剛好遇到expire為保留字串，所以expire 要加上`expire`  
@@ -95,13 +95,13 @@ def AddMessage(form_msg,user_ID):
 
     conn = mysql.connector.connect(      
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='2033')  # 密碼
+    password='root')  # 密碼
 
     cursor = conn.cursor()
-    sql = "INSERT INTO message (title,content,time,user_id) VALUES (%s,%s, %s,%s)"
-    val = (form_msg['title'], form_msg['content'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_ID )
+    sql = "INSERT INTO message (user,title,content,time) VALUES (%s,%s, %s,%s)"
+    val = (user_ID,form_msg['title'], form_msg['content'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     cursor.execute(sql, val)
     conn.commit()
 
@@ -110,12 +110,12 @@ def history(userId):
 
     conn = mysql.connector.connect(      
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='2033')  # 密碼
+    password='root')  # 密碼
 
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM message WHERE user_id= %(user_id)s", {'user_id': userId})
+    cursor.execute("SELECT * FROM message WHERE user= %(user)s", {'user': userId})
     report = cursor.fetchall()
      
     if report != []:
@@ -123,15 +123,18 @@ def history(userId):
             
             print('<div class="container_history">')
             print('<div class="history_title">')
-            print(f'Title:<p>{field[2]}</p>')
+            print('<b>Title:</b>')
+            print(f'<p>{field[2]}</p>')
             print('</div>')
 
             print('<div class="history_content">')
-            print(f'content:<p>{field[3]}</p>')
+            print('<b>Content:</b>')
+            print(f'<p>{field[3]}</p>')
             print('</div>')
 
             print('<div class="history_time">')
-            print(f'post_time:<p>{field[4]}</p>')
+            print('<b>Post time:</b>')
+            print(f'<p>{field[4]}</p>')
             print('</div>')
             
             print('<hr/>')
@@ -156,7 +159,7 @@ else:
     #print('hiii')
     sid_cookie = findSID(string_cookie)
     data = SID_info(sid_cookie)
-    #print(data)
+    #print(sid_cookie)
 
     if method=='POST':
         POSTstr_len = int(os.environ['CONTENT_LENGTH'])
@@ -166,14 +169,21 @@ else:
         AddMessage(my_query,data[0])
   
 
-#print('Hi,',data[0]
+#print('Hi,',data[0])
 print('<!DOCTYPE html> ')
 print('<html>')
 print('<head>')
 print('<title>留言板</title>')
 print('</head>')
 print('<body>')
-print('<div class="container">')
+print('<div style="text-align:right; class="container_logout">')
+print('<form action="./logout.py" method="POST">')
+print('<input type="submit" value="Log Out">')
+print('</form>')
+print('</div>')
+
+
+print('<div style="text-align:center;class="container">')
 print(' <form action="./message.py" method="POST">')
 print('     標題:<input type="text" name="title">',"<BR>")
 print('     內容:',"<BR>")
