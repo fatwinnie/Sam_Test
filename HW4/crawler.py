@@ -52,6 +52,7 @@ def write_DB():
     charset='utf8') 
 
     cursor = conn.cursor()
+    # 取 Title[]長度來得到每個list的迴圈次數
     a = len(Title)
     for i in range(a):           
         try:
@@ -68,19 +69,14 @@ def write_DB():
         except Error as e:
             print("資料庫連接失敗：", e)
 
-        
-        
-        
-            
-            #conn.commit()
+           #conn.commit()
             #conn.close()
             
 
     conn.commit()
     conn.close()
-
-               
-
+    # why conn.commit just can wirte here?
+ 
 
 if __name__	== '__main__':
     pageURL='http://127.0.0.1:8000/cgi-bin/message.py'
