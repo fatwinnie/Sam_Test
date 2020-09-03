@@ -10,8 +10,8 @@ Time = []
 
 def getData(url):
     my_header={
-        'user-agent':'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
-        'cookie':'POOH_SID=af7ecddd305dbea92368cf7c14c86d0573fcee50'
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
+        'cookie':'Cookie: POOH_SID=ba47332da89c5a95675360fb1c6f8c4c1df6842e'
     }
     resp = requests.get(url, headers= my_header)
     resp.encoding ='utf-8'
@@ -45,20 +45,20 @@ def write_CSV():
 def write_DB():
     conn = mysql.connector.connect(      
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='2033',  # 密碼
+    password='root',  # 密碼
     charset='utf8') 
 
     cursor = conn.cursor()
     if Title != []:
         for i in Title:
             print(i)
-            sql = "INSERT INTO crawler (title) VALUES (%s)"
-            val = i
-            cursor.execute(sql, val)
-            onn.commit()
-            conn.close()
+            #sql = "INSERT INTO crawler (title) VALUES (%s)"
+            #val = i
+            #cursor.execute(sql, val)
+            #onn.commit()
+            #conn.close()
 
 
 
@@ -70,8 +70,3 @@ if __name__	== '__main__':
     getData(pageURL)
     write_CSV()
     write_DB()
-  
-
-        
-
-
