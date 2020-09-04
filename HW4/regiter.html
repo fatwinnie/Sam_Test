@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+        <meta charset='utf-8' />
+</head>
+<body>
+
+<form id="regform" onsubmit="return checkinput()" >
+<table>
+        <tr>
+                <td>登入帳號：</td>
+                <td><input type="text" name="login_name" required="required" id='login_name' /></td>            
+        </tr>
+        <tr>
+                <td>登入密碼：</td>
+                <td><input type="password" name="login_pass1" required="required" id='login_pass1' /></td>
+        </tr>
+        <tr>
+                <td>確認密碼：</td>
+                <td><input type="password" name="login_pass2" required="required" id='login_pass2' /></td>
+                <td>再輸入一次密碼，確認沒有打錯字</td>
+        </tr>
+
+        <tr>
+                <td colspan="3" style="text-align:center; ">
+                        <input type="hidden" name="action" value="reg" />
+                        <input type="submit" value="送出註冊" />
+                </td>
+        </tr>
+
+</table>
+</form>
