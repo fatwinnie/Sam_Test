@@ -17,10 +17,9 @@ def getData(url):
     my_data = {
         'UserName': 'ting',
         'pwd':'1234',
-
     }
-    login_url = 'http://127.0.0.1:8000/cgi-bin/login.py'
 
+    login_url = 'http://127.0.0.1:8000/cgi-bin/login.py'
     session = requests.Session()
     session.post(login_url, headers = my_header , data = my_data)
     resp = session.get(url,headers= my_header)
@@ -30,17 +29,26 @@ def getData(url):
     soup = BeautifulSoup(resp.text, 'lxml')
     find_title = soup.find_all("div",class_="history_title")
     fine_content = soup.find_all("div",class_= "history_content")
+    find_time = soup.find_all("div",class_="history_time")\
+'''
+    my_header={
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
+        'cookie':'Cookie: POOH_SID=d407bcc9fce5042210db0244191ce1eb258347f4'
+    }
+    resp = requests.get(url, headers= my_header)
+    resp.encoding ='utf-8'
+    #解析原始碼
+    soup = BeautifulSoup(resp.text, 'lxml')
+    find_title = soup.find_all("div",class_="history_title")
+    fine_content = soup.find_all("div",class_= "history_content")
     find_time = soup.find_all("div",class_="history_time")
-
-    print(type(resp.cookies),resp.cookies)
-    print(type(resp.headers),resp.headers)
+'''
 
    
     for title in find_title:        
         Title.append(title.p.string)
     #print(Title)
    
-
     for content in fine_content:      
         Content.append(content.p.string)
     #print(Content)
