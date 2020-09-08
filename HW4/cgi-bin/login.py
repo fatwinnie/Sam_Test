@@ -146,9 +146,9 @@ else:
         str_cookie = os.environ.get('HTTP_COOKIE')
         
         if(str_cookie.find('POOH_SID')<0):
-            token = hashlib.sha1() #hashlib提供字元加密功能
-            token.update(get_random_string(50).encode('utf-8')) #產生隨機字串
-            tokenCode = token.hexdigest()
+            token = hashlib.sha1() #hashlib提供字元加密功能,建立sha1物件
+            token.update(get_random_string(50).encode('utf-8')) #更新sha1雜湊值（用隨機產生字串,先將資料編碼,再更新）
+            tokenCode = token.hexdigest()  #取得sha1雜湊值
             insertSID(tokenCode)
             print("Set-Cookie:POOH_SID=",tokenCode)
             print('')
