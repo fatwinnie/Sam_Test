@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<form id="regform" onsubmit="return checkinput()" >
+<form action="cgi-bin/memberRegister.py" method="POST" >
 <table>
         <tr>
                 <td>登入帳號：</td>
@@ -23,8 +23,7 @@
 
         <tr>
                 <td colspan="3" style="text-align:center; ">
-                        <input type="hidden" name="action" value="reg" />
-                        <input type="submit" value="送出註冊" />
+                        <input type="submit" value="送出" />
                 </td>
         </tr>
 
