@@ -1,4 +1,4 @@
-#! /home/ting/My_test2/bin/python3
+#! /home/ting/My_test1/bin/python3
 
 import os
 import sys
@@ -6,11 +6,15 @@ import mysql.connector
 from mysql.connector import Error
 from http import cookies
 import hashlib
+import bcrypt
 import random
 import string
 from datetime import datetime, timedelta
 
-
+#print('Content-type:text/html;charset=UTF-8')
+#print('')
+#print(os.environ['HTTP_USER_AGENT'])
+#os.exit()
 
 def split(s:str,delimiter:str) -> list:
     s += delimiter # tricky
@@ -63,24 +67,40 @@ def query_components(s:str, codec='utf8') -> str:
 
 def validate(_username,_password):
     global userData
-    
-    conn = mysql.connector.connect(      
+    try:
+        conn = mysql.connector.connect(      
         host='localhost', # 主機名稱
-        database='test1', # 資料庫名稱
+        database='homework', # 資料庫名稱
         user='root',      # 帳號
         password='2033')  # 密碼
 
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': _username})
-    userData = cursor.fetchone()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM member WHERE name = %(name)s", {'name': _username})
+        userData = cursor.fetchone()
    
-    if userData is not None:
+        if userData is not None:
+            if bcrypt.checkpw(_password.encode(),userData[2].encode()):
+                return True
+            else:
+                return False
+        else:
+            return False
 
+    except Exception as e:
+        print('Error:',e)
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+        '''
         if userData[2] == _password:
             #print(userData[1]) 
             return True
         else:
             return False
+            '''
        
 
 def get_random_string(length):
@@ -94,12 +114,12 @@ def insertSID(_SID):
 
     conn = mysql.connector.connect(      
     host='localhost', # 主機名稱
-    database='test1', # 資料庫名稱
+    database='homework', # 資料庫名稱
     user='root',      # 帳號
     password='2033')  # 密碼
 
     #conn = pymysql.connect(host='localhost', port=3306, user='root', passwd='10017730', db='ruby_db', charset='utf8')
-    timeout = datetime.now() + timedelta(hours=1)
+    timeout = datetime.now() + timedelta(hours=48)
     cursor = conn.cursor()
     cursor.execute("INSERT INTO user_verify (SID, user_ID, expire) VALUES (%s, %s, %s)" ,(_SID, userData[0],timeout ))
     conn.commit()
@@ -146,9 +166,9 @@ else:
         str_cookie = os.environ.get('HTTP_COOKIE')
         
         if(str_cookie.find('POOH_SID')<0):
-            token = hashlib.sha1() #hashlib提供字元加密功能,建立sha1物件
-            token.update(get_random_string(50).encode('utf-8')) #更新sha1雜湊值（用隨機產生字串,先將資料編碼,再更新）
-            tokenCode = token.hexdigest()  #取得sha1雜湊值
+            token = hashlib.sha1() #hashlib提供字元加密功能
+            token.update(get_random_string(50).encode('utf-8')) #產生隨機字串
+            tokenCode = token.hexdigest()
             insertSID(tokenCode)
             print("Set-Cookie:POOH_SID=",tokenCode)
             print('')
@@ -156,7 +176,7 @@ else:
         else:
             SID_cookie = findSID(str_cookie)
 
-        #print('HELLO!!'+" "+post_dict['UserName'])      
+        print('HELLO!!'+" "+post_dict['UserName'])      
         print('<meta http-equiv="refresh" content="1; url=./message.py">')
 
     else: 
