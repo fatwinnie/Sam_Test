@@ -1,2 +1,8 @@
 1. 登入後，message.py 要返回自己(不要像HW3 message.py 的表單轉到message_server.py)
 2. 加入token cookie session
+
+資料庫:
+member --> id,name,password,salt
+message --> id,user,title,content,time
+user_verify -->id,SID,user_id,expire
+crawler --> crawler_id,title,content,time
