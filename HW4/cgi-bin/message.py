@@ -72,7 +72,7 @@ def SID_info(_sid):
     host='localhost', # 主機名稱
     database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='root')  # 密碼
+    password='2033')  # 密碼
 
     cursor=conn.cursor()
     row_count=cursor.execute("SELECT user_ID FROM user_verify JOIN member \
@@ -97,7 +97,7 @@ def AddMessage(form_msg,user_ID):
     host='localhost', # 主機名稱
     database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='root')  # 密碼
+    password='2033')  # 密碼
 
     cursor = conn.cursor()
     sql = "INSERT INTO message (user,title,content,time) VALUES (%s,%s, %s,%s)"
@@ -112,7 +112,7 @@ def history(userId):
     host='localhost', # 主機名稱
     database='homework', # 資料庫名稱
     user='root',      # 帳號
-    password='root')  # 密碼
+    password='2033')  # 密碼
 
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM message WHERE user= %(user)s", {'user': userId})
