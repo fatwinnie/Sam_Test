@@ -10,7 +10,7 @@ Time = []
 
 class SearchWEB:
 
-    def getData(url):
+    def getData(self,url):
         my_header={
             'User-Agent':'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0',
             
@@ -46,19 +46,14 @@ class SearchWEB:
 
    
     
-    def write_CSV():
-        a = len(Title)
+    def write_CSV(self,Title,Content,Time):
+        
         with open('tingMsg.csv', 'w', newline='',encoding='utf_8') as csvfile:
-            for i in range(a):
-                writer = csv.writer(csvfile, Title)
-                writer.writerow(Title)
-                writer.writerow(Content)
-                writer.writerow(Time)
-                              
-            #writer = csv.writer(csvfile, Title)
-            #writer.writerow(Title)
-            #writer.writerow(Content)
-            #writer.writerow(Time)
+    
+            writer = csv.writer(csvfile, Title)
+            writer.writerow(Title)
+            writer.writerow(Content)
+            writer.writerow(Time)
 
     def write_DB():
         conn = mysql.connector.connect(      
@@ -90,7 +85,8 @@ class SearchWEB:
 
 if __name__	== '__main__':
     pageURL='http://127.0.0.1:8000/cgi-bin/message.py'
-    SearchWEB.getData(pageURL)
-    SearchWEB.write_CSV()
-    #SearchWEB.write_DB()    
+    search_web = SearchWEB()
+    search_web.getData(pageURL)
+    search_web.write_CSV(Title,Content,Time)
+    #search_web.write_DB()    
   
