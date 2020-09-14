@@ -26,7 +26,7 @@ def deleteSID(_sid):
             host='localhost', # 主機名稱
             database='homework', # 資料庫名稱
             user='root',      # 帳號
-            password='root')  # 密碼
+            password='2033')  # 密碼
 
         cursor = conn.cursor()
         
